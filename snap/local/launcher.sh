@@ -1,23 +1,17 @@
 #!/bin/sh
-# Wrapper to check for custom config in $SNAP_USER_COMMON or $SNAP_COMMON and
+# Wrapper to check for custom config $SNAP_COMMON and
 # use it otherwise fall back to the included basic config which will at least
 # allow mosquitto to run and do something.
-# This script will also copy the full example config in to SNAP_USER_COMMON or
+# This script will also copy the full example config in to 
 # SNAP_COMMON so that people can refer to it.
 #
-# The decision about whether to use SNAP_USER_COMMON or SNAP_COMMON is taken
-# based on the user that runs the command. If the user is root, it is assumed
-# that mosquitto is being run as a system daemon, and SNAP_COMMON will be used.
-# If a non-root user runs the command, then SNAP_USER_COMMON will be used.
 
-case "$SNAP_USER_COMMON" in
-	*/root/snap/mosquitto/common*) COMMON=$SNAP_COMMON ;;
-	*)                             COMMON=$SNAP_USER_COMMON ;;
-esac
-
+echo "Running epi-mqtt launcher script..."
+# Use $SNAP_COMMON for the config files always 
+COMMON=$SNAP_COMMON 
 CONFIG_FILE="$SNAP/default_config.conf"
 CUSTOM_CONFIG="$COMMON/mosquitto.conf"
-
+echo "Searching for a custom config mosquitto.conf in $COMMON"
 
 # Copy the example config if it doesn't exist
 if [ ! -e "$COMMON/mosquitto_example.conf" ]
